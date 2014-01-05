@@ -1,0 +1,51 @@
+package com.example.autocompletetextviewdb;
+
+import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.widget.ArrayAdapter;
+
+public class CustomAutoCompleteTextChangedListener implements TextWatcher {
+
+	public static final String TAG = "CustomAutoCompleteTextChangedListener.java";
+	Context context;
+
+	public CustomAutoCompleteTextChangedListener(Context context) {
+		this.context = context;
+	}
+
+	@Override
+	public void afterTextChanged(Editable s) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onTextChanged(CharSequence userInput, int start, int before,
+			int count) {
+
+		// caso você queira ver no logcat o que o usuário está digitando
+		Log.e(TAG, "User input: " + userInput);
+
+		MainActivity mainActivity = ((MainActivity) context);
+
+		// query do banco de dados baseada no que o usuário insere
+		mainActivity.item = mainActivity.getItemsFromDb(userInput.toString());
+
+		// atualizando o adapter
+		mainActivity.myAdapter.notifyDataSetChanged();
+		mainActivity.myAdapter = new ArrayAdapter<String>(mainActivity,
+				android.R.layout.simple_dropdown_item_1line, mainActivity.item);
+		mainActivity.myAutoComplete.setAdapter(mainActivity.myAdapter);
+
+	}
+
+}
